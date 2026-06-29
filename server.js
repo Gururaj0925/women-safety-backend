@@ -594,17 +594,13 @@ app.post('/api/sos/trigger', async (req, res) => {
     const { userId, location, source, reason, message, contacts = [] } = req.body;
 // -------- EMAIL ALERT --------
   const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
+  host: "smtp-relay.brevo.com",
   port: 587,
   secure: false,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
-  },
-  tls: {
-    rejectUnauthorized: false
-  },
-  family: 4
+  }
 });
 
     const locationLink =
@@ -614,10 +610,10 @@ app.post('/api/sos/trigger', async (req, res) => {
 
     try {
       await transporter.sendMail({
-        from: "g7892712433@gmail.com",
-        to: "gurusirsi25@gmail.com",
-        subject: "🚨 Emergency SOS Alert",
-        text: `
+          from: process.env.EMAIL_USER,
+          to: "gurusirsi25@gmail.com",
+          subject: "🚨 Emergency SOS Alert",
+          text: `
 🚨 Emergency Triggered!
 
 User: ${userId}
