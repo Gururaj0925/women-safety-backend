@@ -638,7 +638,8 @@ app.post('/api/sos/trigger', async (req, res) => {
   console.log("BREVO KEY exists:", !!process.env.BREVO_API_KEY);
   console.log("BREVO KEY prefix:", process.env.BREVO_API_KEY?.substring(0, 8));
   console.log("Sending Brevo API request...");
-  
+  console.log("user",userId)
+
 
 } catch (emailError) {
   console.log("FULL ERROR:", emailError.message);
