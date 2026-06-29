@@ -593,15 +593,7 @@ app.post('/api/sos/trigger', async (req, res) => {
   try {
     const { userId, location, source, reason, message, contacts = [] } = req.body;
 // -------- EMAIL ALERT --------
-  const transporter = nodemailer.createTransport({
-  host: "smtp-relay.brevo.com",
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
+
 
     const locationLink =
       location?.lat && location?.lng
@@ -609,7 +601,10 @@ app.post('/api/sos/trigger', async (req, res) => {
         : 'Location unavailable';
 
        
-    try {
+  try {
+  console.log("BREVO KEY exists:", !!process.env.BREVO_API_KEY);
+  console.log("Sending Brevo API request...");
+
   const response = await axios.post(
     "https://api.brevo.com/v3/smtp/email",
     {
@@ -639,11 +634,13 @@ app.post('/api/sos/trigger', async (req, res) => {
     }
   );
 
-  console.log("Brevo API email sent:", response.data);
+  console.log("Brevo success:", response.data);
 
-    } catch (emailError) {
-      console.error("Email sending failed:", emailError);
-    }
+} catch (emailError) {
+  console.log("FULL ERROR:", emailError.message);
+  console.log("RESPONSE:", emailError.response?.data);
+}
+
 
     // -------- SMS / CONTACT ALERT --------
     const fallbackPhone = process.env.SOS_NOTIFICATION_PHONE
