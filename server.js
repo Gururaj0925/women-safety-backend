@@ -614,11 +614,11 @@ app.post('/api/sos/trigger', async (req, res) => {
     {
       sender: {
         name: "Women Safety Tracker",
-        email: "g7892712433@gmail.com"
+        email: "gurusirsi25@gmail.com"
       },
       to: [
         {
-          email: "gurusirsi25@gmail.com"
+          email: "g7892712433@gmail.com"
         }
       ],
       subject: "🚨 Emergency SOS Alert",
@@ -639,7 +639,7 @@ app.post('/api/sos/trigger', async (req, res) => {
   );
 
   console.log("Brevo API email sent:", response.data);
-  
+
     } catch (emailError) {
       console.error("Email sending failed:", emailError);
     }
