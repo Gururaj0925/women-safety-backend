@@ -1,4 +1,6 @@
 const express = require('express');
+const dns = require('dns');
+dns.setDefaultResultOrder('ipv4first');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
@@ -401,7 +403,13 @@ const notifyEmergencyContact = async ({ contact, userId, reason, message, locati
 };
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/womens-safety-tracker')
+console.log("Connecting to MongoDB...");
+console.log("MONGO URI =", process.env.MONGO_URI);
+mongoose.connect(process.env.MONGO_URI, {
+  serverSelectionTimeoutMS: 5000,
+  ssl: true,
+  tls: true
+})
 .then(() => console.log('MongoDB connected successfully'))
 .catch(err => console.error('MongoDB connection error:', err));
 
