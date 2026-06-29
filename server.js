@@ -650,6 +650,7 @@ app.post('/api/sos/trigger', async (req, res) => {
     await newSOS.save();
 
     console.log(`🚨 SOS TRIGGERED VIA ${source}`);
+    console.log("Sending payload:", payload);
 
     res.status(201).json({
       success: true,
