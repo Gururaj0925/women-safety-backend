@@ -414,7 +414,7 @@ mongoose.connect(uri)
   .then(() => console.log("MongoDB connected successfully"))
   .catch(err => console.error("MongoDB connection error:", err));
 
-  
+
 // User Model
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -599,8 +599,8 @@ app.post('/api/sos/trigger', async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: "g7892712433@gmail.com",
-        pass: "zcpb yswa zcap cqfu"
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
       }
     });
 
