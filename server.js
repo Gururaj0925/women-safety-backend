@@ -609,24 +609,37 @@ app.post('/api/sos/trigger', async (req, res) => {
         : 'Location unavailable';
 
     try {
-      await transporter.sendMail({
-          from: process.env.EMAIL_USER,
-          to: "gurusirsi25@gmail.com",
-          subject: "🚨 Emergency SOS Alert",
-          text: `
-🚨 Emergency Triggered!
+  const response = await axios.post(
+    "https://api.brevo.com/v3/smtp/email",
+    {
+      sender: {
+        name: "Women Safety Tracker",
+        email: "g7892712433@gmail.com"
+      },
+      to: [
+        {
+          email: "gurusirsi25@gmail.com"
+        }
+      ],
+      subject: "🚨 Emergency SOS Alert",
+      htmlContent: `
+        <h2>🚨 Emergency Triggered!</h2>
+        <p><b>User:</b> ${userId}</p>
+        <p><b>Source:</b> ${source}</p>
+        <p><b>Reason:</b> ${reason}</p>
+        <p><b>Message:</b> ${message}</p>
+      `
+    },
+    {
+      headers: {
+        "api-key": process.env.BREVO_API_KEY,
+        "Content-Type": "application/json"
+      }
+    }
+  );
 
-User: ${userId}
-Source: ${source}
-Reason: ${reason}
-Location: ${locationLink}
-
-Message:
-${message || "No additional message"}
-        `
-      });
-
-      console.log("Emergency email sent successfully");
+  console.log("Brevo API email sent:", response.data);
+  
     } catch (emailError) {
       console.error("Email sending failed:", emailError);
     }
