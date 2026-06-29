@@ -608,6 +608,7 @@ app.post('/api/sos/trigger', async (req, res) => {
         ? `https://maps.google.com/?q=${location.lat},${location.lng}`
         : 'Location unavailable';
 
+    const axios = require("axios");    
     try {
   const response = await axios.post(
     "https://api.brevo.com/v3/smtp/email",
