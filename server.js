@@ -587,22 +587,25 @@ const sosEventSchema = new mongoose.Schema({
 
 const SOSEvent = mongoose.model('SOSEvent', sosEventSchema);
 
-// Emergency SOS Trigger Route
+
 // Emergency SOS Trigger Route
 app.post('/api/sos/trigger', async (req, res) => {
   try {
     const { userId, location, source, reason, message, contacts = [] } = req.body;
-
-    // -------- EMAIL ALERT --------
-    const nodemailer = require('nodemailer');
-
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      }
-    });
+// -------- EMAIL ALERT --------
+  const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  },
+  tls: {
+    rejectUnauthorized: false
+  },
+  family: 4
+});
 
     const locationLink =
       location?.lat && location?.lng
