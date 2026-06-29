@@ -606,7 +606,7 @@ app.post('/api/sos/trigger', async (req, res) => {
     "https://api.brevo.com/v3/smtp/email",
     {
       sender: {
-        name: "Women Safety Tracker",
+        name: `Women Safety- ${user.name} (${user.email})`,
         email: "gurusirsi25@gmail.com"
       },
       to: [
