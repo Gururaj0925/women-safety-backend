@@ -405,16 +405,16 @@ const notifyEmergencyContact = async ({ contact, userId, reason, message, locati
 // MongoDB Connection
 
 
+const uri = process.env.MONGO_URI?.trim();
+
 console.log("Connecting to MongoDB...");
-console.log("MONGO URI RAW:");
-console.log(JSON.stringify(process.env.MONGO_URI));
+console.log(JSON.stringify(uri));
 
-mongoose.connect(process.env.MONGO_URI, {
-  serverSelectionTimeoutMS: 30000,
-})
-.then(() => console.log("MongoDB connected successfully"))
-.catch(err => console.error("MongoDB connection error:", err));
+mongoose.connect(uri)
+  .then(() => console.log("MongoDB connected successfully"))
+  .catch(err => console.error("MongoDB connection error:", err));
 
+  
 // User Model
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
