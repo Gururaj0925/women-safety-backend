@@ -602,16 +602,17 @@ app.post('/api/sos/trigger', async (req, res) => {
   console.log("BREVO KEY exists:", !!process.env.BREVO_API_KEY);
   console.log("Sending Brevo API request...");
 
+
   const response = await axios.post(
     "https://api.brevo.com/v3/smtp/email",
     {
       sender: {
-        name: `Women Safety- ${user.name} (${user.email})`,
+        name: `Women Safety- ${userId}`,
         email: "muttinsonal@gmail.com"
       },
       to: [
         {
-          email: "swatirjituri@gmail.com"
+          email: "sonuvmuttin@gmail.com"
         }
       ],
       subject: "🚨 Emergency SOS Alert",
