@@ -714,6 +714,7 @@ app.get('/api/sos/events', async (req, res) => {
   }
 });
 
+
 const nodemailer = require('nodemailer');
 app.post('/send-sos', async (req, res) => {
     try {
