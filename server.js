@@ -592,8 +592,8 @@ const SOSEvent = mongoose.model('SOSEvent', sosEventSchema);
 app.post('/api/sos/trigger', async (req, res) => {
   try {
     const { userId, location, source, reason, message, contacts = [] } = req.body;
-    console.log("REQ BODY:", req.body);
-    console.log("LOCATION:", location);
+    console.log("FULL BODY:", req.body);
+console.log("LOCATION:", req.body.location);
 // -------- EMAIL ALERT --------
 
    const locationLink =
