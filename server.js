@@ -626,7 +626,7 @@ app.post('/api/sos/trigger', async (req, res) => {
           },
           to: [
             {
-              email: "sonuvmuttin@gmail.com"
+              email: "gurusirsi25@gmail.com"
             }
           ],
           subject: "🚨 Emergency SOS Alert",
@@ -714,7 +714,6 @@ app.post('/api/sos/trigger', async (req, res) => {
     });
   }
 });
-
 
 // GET SOS Events Route
 app.get('/api/sos/events', async (req, res) => {
