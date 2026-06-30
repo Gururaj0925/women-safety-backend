@@ -594,10 +594,13 @@ app.post('/api/sos/trigger', async (req, res) => {
     const { userId, location, source, reason, message, contacts = [] } = req.body;
 // -------- EMAIL ALERT --------
 
-    const locationLink =
-      location?.lat && location?.lng
-        ? `https://maps.google.com/?q=${location.lat},${location.lng}`
-        : 'Location unavailable';       
+   const locationLink =
+  location &&
+  location.lat !== undefined &&
+  location.lng !== undefined
+    ? `https://maps.google.com/?q=${location.lat},${location.lng}`
+    : 'Location unavailable';
+        
   try {
   console.log("BREVO KEY exists:", !!process.env.BREVO_API_KEY);
   console.log("Sending Brevo API request...");
@@ -616,11 +619,16 @@ app.post('/api/sos/trigger', async (req, res) => {
         }
       ],
       subject: "🚨 Emergency SOS Alert",
-      htmlContent: `
-        <h2>🚨 Emergency Triggered!</h2>
-        <p><b>Source:</b> ${source}</p>
-        <p><b>Reason:</b> ${reason}</p>
-        <p><b>Message:</b> ${message}</p>
+     htmlContent: `
+  <h2>🚨 Emergency Triggered!</h2>
+  <p><b>User ID:</b> ${userId}</p>
+  <p><b>Source:</b> ${source}</p>
+  <p><b>Reason:</b> ${reason}</p>
+  <p><b>Message:</b> ${message}</p>
+  <p><b>Location:</b> 
+    <a href="${locationLink}" target="_blank">${locationLink}</a>
+  </p>
+`
       `
     },
     {
