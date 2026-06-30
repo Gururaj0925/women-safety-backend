@@ -616,6 +616,9 @@ app.post('/api/sos/trigger', async (req, res) => {
     // -------- EMAIL ALERT --------
     try {
       console.log("BREVO KEY exists:", !!process.env.BREVO_API_KEY);
+      console.log("Receiver Email:", "gurusirsi25@gmail.com");
+      console.log("Email Message:", message);
+      console.log("Location Link:", locationLink);
 
       const response = await axios.post(
         "https://api.brevo.com/v3/smtp/email",
@@ -625,25 +628,20 @@ app.post('/api/sos/trigger', async (req, res) => {
             email: "muttinsonal@gmail.com"
           },
           to: [
-            {
-              email: "gurusirsi25@gmail.com"
-            }
+          {
+            email: process.env.RECEIVER_EMAIL
+          }
           ],
           subject: "🚨 Emergency SOS Alert",
           htmlContent: `
-            <h2>🚨 Emergency Triggered!</h2>
-            <p><b>User ID:</b> ${userId || "Unknown"}</p>
-            <p><b>Source:</b> ${source || "manual"}</p>
-            <p><b>Reason:</b> ${reason || "Not specified"}</p>
-            <p><b>Message:</b> ${message || "No message"}</p>
-            <p><b>Location:</b></p>
-            <p>
-              <a href="${locationLink}" target="_blank">
-                Open Live Location
-              </a>
-            </p>
-            <p>${locationLink}</p>
-          `
+  <h2>🚨 Emergency SOS Alert</h2>
+  <p><b>User ID:</b> ${userId}</p>
+  <p><b>Source:</b> ${source}</p>
+  <p><b>Reason:</b> ${reason}</p>
+  <p><b>Message:</b></p>
+  <pre>${message || "No message provided"}</pre>
+  <p><b>Location:</b></p>
+  <a href="${locationLink}" target="_blank">${locationLink}</a>`
         },
         {
           headers: {
