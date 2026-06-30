@@ -592,6 +592,8 @@ const SOSEvent = mongoose.model('SOSEvent', sosEventSchema);
 app.post('/api/sos/trigger', async (req, res) => {
   try {
     const { userId, location, source, reason, message, contacts = [] } = req.body;
+    console.log("REQ BODY:", req.body);
+    console.log("LOCATION:", location);
 // -------- EMAIL ALERT --------
 
    const locationLink =
@@ -600,7 +602,7 @@ app.post('/api/sos/trigger', async (req, res) => {
   location.lng !== undefined
     ? `https://maps.google.com/?q=${location.lat},${location.lng}`
     : 'Location unavailable';
-        
+
   try {
   console.log("BREVO KEY exists:", !!process.env.BREVO_API_KEY);
   console.log("Sending Brevo API request...");
