@@ -607,11 +607,11 @@ app.post('/api/sos/trigger', async (req, res) => {
     {
       sender: {
         name: `Women Safety- ${user.name} (${user.email})`,
-        email: "gurusirsi25@gmail.com"
+        email: "muttinsonal@gmail.com"
       },
       to: [
         {
-          email: "g7892712433@gmail.com"
+          email: "swatirjituri@gmail.com"
         }
       ],
       subject: "🚨 Emergency SOS Alert",
