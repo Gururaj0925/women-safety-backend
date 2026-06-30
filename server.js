@@ -607,7 +607,7 @@ app.post('/api/sos/trigger', async (req, res) => {
     "https://api.brevo.com/v3/smtp/email",
     {
       sender: {
-        name: `Women Safety- ${userId}`,
+        name: "Women Safety",
         email: "muttinsonal@gmail.com"
       },
       to: [
@@ -618,7 +618,6 @@ app.post('/api/sos/trigger', async (req, res) => {
       subject: "🚨 Emergency SOS Alert",
       htmlContent: `
         <h2>🚨 Emergency Triggered!</h2>
-        <p><b>User:</b> ${userId}</p>
         <p><b>Source:</b> ${source}</p>
         <p><b>Reason:</b> ${reason}</p>
         <p><b>Message:</b> ${message}</p>
@@ -636,7 +635,7 @@ app.post('/api/sos/trigger', async (req, res) => {
   console.log("BREVO KEY exists:", !!process.env.BREVO_API_KEY);
   console.log("BREVO KEY prefix:", process.env.BREVO_API_KEY?.substring(0, 8));
   console.log("Sending Brevo API request...");
-  console.log("user",userId)
+  //console.log("user",userId)
 
 
 } catch (emailError) {
