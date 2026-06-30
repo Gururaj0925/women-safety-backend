@@ -591,75 +591,80 @@ const SOSEvent = mongoose.model('SOSEvent', sosEventSchema);
 // Emergency SOS Trigger Route
 app.post('/api/sos/trigger', async (req, res) => {
   try {
-    const { userId, location, source, reason, message, contacts = [] } = req.body;
+    const {
+      userId,
+      location,
+      source,
+      reason,
+      message,
+      contacts = []
+    } = req.body;
+
     console.log("FULL BODY:", req.body);
-console.log("LOCATION:", req.body.location);
-// -------- EMAIL ALERT --------
+    console.log("LOCATION:", location);
 
-   const locationLink =
-  location &&
-  location.lat !== undefined &&
-  location.lng !== undefined
-    ? `https://maps.google.com/?q=${location.lat},${location.lng}`
-    : 'Location unavailable';
+    // -------- LOCATION LINK --------
+    const locationLink =
+      location &&
+      location.lat !== undefined &&
+      location.lng !== undefined
+        ? `https://maps.google.com/?q=${location.lat},${location.lng}`
+        : "Location unavailable";
 
-  try {
-  console.log("BREVO KEY exists:", !!process.env.BREVO_API_KEY);
-  console.log("Sending Brevo API request...");
+    console.log("Location Link:", locationLink);
 
+    // -------- EMAIL ALERT --------
+    try {
+      console.log("BREVO KEY exists:", !!process.env.BREVO_API_KEY);
 
-  const response = await axios.post(
-    "https://api.brevo.com/v3/smtp/email",
-    {
-      sender: {
-        name: "Women Safety",
-        email: "muttinsonal@gmail.com"
-      },
-      to: [
+      const response = await axios.post(
+        "https://api.brevo.com/v3/smtp/email",
         {
-          email: "sonuvmuttin@gmail.com"
+          sender: {
+            name: "Women Safety",
+            email: "muttinsonal@gmail.com"
+          },
+          to: [
+            {
+              email: "sonuvmuttin@gmail.com"
+            }
+          ],
+          subject: "🚨 Emergency SOS Alert",
+          htmlContent: `
+            <h2>🚨 Emergency Triggered!</h2>
+            <p><b>User ID:</b> ${userId || "Unknown"}</p>
+            <p><b>Source:</b> ${source || "manual"}</p>
+            <p><b>Reason:</b> ${reason || "Not specified"}</p>
+            <p><b>Message:</b> ${message || "No message"}</p>
+            <p><b>Location:</b></p>
+            <p>
+              <a href="${locationLink}" target="_blank">
+                Open Live Location
+              </a>
+            </p>
+            <p>${locationLink}</p>
+          `
+        },
+        {
+          headers: {
+            "api-key": process.env.BREVO_API_KEY,
+            "Content-Type": "application/json"
+          }
         }
-      ],
-      subject: "🚨 Emergency SOS Alert",
-     htmlContent: `
-  <h2>🚨 Emergency Triggered!</h2>
-  <p><b>User ID:</b> ${userId}</p>
-  <p><b>Source:</b> ${source}</p>
-  <p><b>Reason:</b> ${reason}</p>
-  <p><b>Message:</b> ${message}</p>
-  <p><b>Location:</b> 
-    <a href="${locationLink}" target="_blank">${locationLink}</a>
-  </p>
-`
-      `
-    },
-    {
-      headers: {
-        "api-key": process.env.BREVO_API_KEY,
-        "Content-Type": "application/json"
-      }
+      );
+
+      console.log("Brevo success:", response.data);
+    } catch (emailError) {
+      console.error("Email sending failed:", emailError.message);
+      console.error("Brevo response:", emailError.response?.data);
     }
-  );
-
-  console.log("Brevo success:", response.data);
-  console.log("BREVO KEY exists:", !!process.env.BREVO_API_KEY);
-  console.log("BREVO KEY prefix:", process.env.BREVO_API_KEY?.substring(0, 8));
-  console.log("Sending Brevo API request...");
-  //console.log("user",userId)
-
-
-} catch (emailError) {
-  console.log("FULL ERROR:", emailError.message);
-  console.log("RESPONSE:", emailError.response?.data);
-}
-
 
     // -------- SMS / CONTACT ALERT --------
     const fallbackPhone = process.env.SOS_NOTIFICATION_PHONE
       ? [
           {
-            id: 'fallback',
-            name: 'Fallback SOS Receiver',
+            id: "fallback",
+            name: "Fallback SOS Receiver",
             phone: process.env.SOS_NOTIFICATION_PHONE
           }
         ]
@@ -683,11 +688,11 @@ console.log("LOCATION:", req.body.location);
     const newSOS = new SOSEvent({
       userId,
       location: location || {},
-      source: source || 'manual',
-      reason: reason || '',
-      message: message || '',
+      source: source || "manual",
+      reason: reason || "",
+      message: message || "",
       contactsNotified: deliveryResults,
-      status: 'active'
+      status: "active"
     });
 
     await newSOS.save();
@@ -696,16 +701,16 @@ console.log("LOCATION:", req.body.location);
 
     res.status(201).json({
       success: true,
-      message: 'Emergency SOS saved and notifications sent successfully.',
+      message: "Emergency SOS saved and notifications sent successfully.",
       eventId: newSOS._id,
       contactsNotified: deliveryResults
     });
 
   } catch (error) {
-    console.error('SOS trigger error:', error);
+    console.error("SOS trigger error:", error);
     res.status(500).json({
       success: false,
-      message: 'Server error triggering SOS'
+      message: "Server error triggering SOS"
     });
   }
 });
