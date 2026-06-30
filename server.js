@@ -616,7 +616,7 @@ app.post('/api/sos/trigger', async (req, res) => {
     // -------- EMAIL ALERT --------
     try {
       console.log("BREVO KEY exists:", !!process.env.BREVO_API_KEY);
-      console.log("Receiver Email:", "gurusirsi25@gmail.com");
+      console.log("Receiver Email:", process.env.RECEIVER_EMAIL);
       console.log("Email Message:", message);
       console.log("Location Link:", locationLink);
 
